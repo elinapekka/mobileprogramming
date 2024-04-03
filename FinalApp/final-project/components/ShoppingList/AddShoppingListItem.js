@@ -42,21 +42,16 @@ export default function AddShoppingListItem({updateShoppingList}) {
                 <Input
                     placeholder="Name"
                     //leftIcon={{ type: 'font-awesome', name: 'comment' }}
-                    //value={newItem.item}
                     onChangeText={value => setNewItem({ ...newItem, item: value })}
                 />
                 <Input
                     placeholder="Amount (optional)"
                     //leftIcon={{ type: 'font-awesome', name: 'comment' }}
-                    //onChangeText={value => this.setState({ comment: value })}
-                    //value={newItem.amount}
                     onChangeText={value => setNewItem({ ...newItem, amount: value })}
                 />
                 <Input
                     placeholder="Price (optional)"
                     //leftIcon={{ type: 'font-awesome', name: 'comment' }}
-                    //onChangeText={value => this.setState({ comment: value })}
-                    //value={newItem.price}
                     onChangeText={value => setNewItem({ ...newItem, price: value })}
                 />
                 <Dialog.Actions>

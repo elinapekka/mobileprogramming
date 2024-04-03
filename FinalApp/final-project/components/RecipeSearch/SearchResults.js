@@ -1,36 +1,59 @@
-import { Overlay, Button, Icon } from '@rneui/themed';
-import { View, Text } from 'react-native';
-import { StatusBar } from 'react-native';
+import { Card, Button } from '@rneui/themed';
+import { View, ScrollView, Text, ActivityIndicator, Image,FlatList } from 'react-native';
+import { useEffect, useState } from 'react';
+import { CardTitle } from '@rneui/base/dist/Card/Card.Title';
+import { fetchRepositories, searchByCategory } from './RecipeApiLinks';
 
+export default function SearchResult({keyword, navigation}) {
+    const [meals, setMeals] = useState([]);
 
-export default function SearchResults({keyword, openOverlay, setOpenOverlay}) {
-    console.log(keyword);
+    const fetchData = async () => {
+        try {
+            const data = await fetchRepositories(searchByCategory(keyword));
+            setMeals(data.meals);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-    const closeOverlay = () => {
-        setOpenOverlay(false);
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const openRecipe = (idMeal) => {
+        return () => {
+            console.log(idMeal)
+            navigation.navigate('SelectedRecipe', {idMeal: idMeal});
+        };
     }
-    
-    return (
-        <>
-            <Overlay isVisible={openOverlay} onBackdropPress={closeOverlay} fullScreen={true}>
-                <Button
-                    icon={
-                    <Icon
-                        name="wrench"
-                        type="font-awesome"
-                        color="white"
-                        size={25}
-                        iconStyle={{ marginRight: 10 }}
-                    />
+
+    if (!meals) {
+        return(
+            <View>
+                <Text>No search results found</Text>
+            </View>
+        )
+    } else {
+        return (
+            <ScrollView>
+                <View style={{flex: 6, width: '90%'}}>
+                    {
+                        meals.map((l, i) => (
+                            <Card key={i}>
+                                <Card.Title>{l.foodTitle}</Card.Title>
+                                <Image
+                                    style={{width:"100%",height:100}}
+                                    resizeMode="contain"
+                                    source={{ uri: l.strMealThumb }}
+                                />
+                                <Text >{l.strMeal}</Text>
+                                <Button title="Check now" onPress={openRecipe(l.idMeal)} />
+                                <Card.Divider/>
+                            </Card>
+                        ))
                     }
-                    title="Go back"
-                    onPress={closeOverlay}
-                />
-                <Text>Hello!</Text>
-                <Text>
-                    {keyword}
-                </Text>
-            </Overlay>
-        </>
-    )
-}
+                </View>
+            </ScrollView>
+        );
+    }
+};

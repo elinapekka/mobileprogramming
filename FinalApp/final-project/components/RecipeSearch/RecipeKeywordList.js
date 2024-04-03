@@ -1,35 +1,55 @@
-import { Card, Button } from '@rneui/themed';
+import { Card, Button, Text } from '@rneui/themed';
 import { View, ScrollView } from 'react-native';
-import SearchResults from './SearchResults';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { fetchRepositories, getAllCategories } from './RecipeApiLinks';
+import SearchBarComponent from '../SearchBarComponent';
 
-const keywordList = ['Pasta', 'Salad', 'Bread', 'Seafood'];
+function RecipeKeywordList({navigation}) {
+    const [keywordList, setKeywordList] = useState([]);
 
-function RecipeKeywordList() {
-    const [openOverlay, setOpenOverlay] = useState(false);
-    const [selectedKeyword, setSelectedKeyword] = useState('');
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                console.log('yess')
+                const data = await fetchRepositories(getAllCategories);
+                setKeywordList(data.categories);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const searchKeyword = (keyword) => {
         return () => {
-            setSelectedKeyword(keyword);
-            setOpenOverlay(true);
+            console.log(keyword)
+            navigation.navigate('SearchResult', {keyword: keyword});
         };
     }
 
-    return (
-        <ScrollView>
-            <SearchResults keyword={selectedKeyword} openOverlay={openOverlay} setOpenOverlay={setOpenOverlay}/>
+    if(!keywordList) {
+        return (
             <View>
-                {
-                    keywordList.map((l, i) => (
-                        <Card key={i}>
-                            <Button title={l} onPress={searchKeyword(l)}/>
-                        </Card>
-                    ))
-                }
+                <Text>Lameee</Text>
             </View>
-        </ScrollView>
-    )
+        )
+    } else {
+        return (
+            <ScrollView>
+                <SearchBarComponent />
+                <View>
+                    {
+                        keywordList.map((l, i) => (
+                            <Card key={i}>
+                                <Button title={l.strCategory} onPress={searchKeyword(l.strCategory)} />
+                            </Card>
+                        ))
+                    }
+                </View>
+            </ScrollView>
+        )
+    }
 };
 
-export {RecipeKeywordList, keywordList};
+export {RecipeKeywordList};
