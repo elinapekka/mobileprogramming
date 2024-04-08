@@ -36,7 +36,8 @@ export default function SearchResult({keyword, navigation}) {
     } else {
         return (
             <ScrollView>
-                <View style={{flex: 6, width: '90%'}}>
+                <Button onPress={() => navigation.goBack()} title="Go back" />
+                <View>
                     {
                         meals.map((l, i) => (
                             <Card key={i}>

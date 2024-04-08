@@ -20,12 +20,12 @@ function RecipeSearchResultsScreen({ route, navigation }) {
     );
 };
 
-function SelectedRecipeScreen({ route }) {
+function SelectedRecipeScreen({ route, navigation }) {
     console.log(route)
     const { idMeal } = route.params;
     return (
         <View>
-            <IndividualRecipe idMeal={idMeal} />
+            <IndividualRecipe idMeal={idMeal} navigation={navigation} />
         </View>
     )
 }

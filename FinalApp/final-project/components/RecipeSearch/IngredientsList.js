@@ -1,24 +1,26 @@
 import { useState, useEffect } from 'react';
-import { View, ScrollView, Text, ActivityIndicator, Image,FlatList } from 'react-native';
+import { View, Text } from 'react-native';
+import { ListItem } from '@rneui/themed';
 
 export default function IngredientsList({recipeInfo}) {
-    const ingredients = []; // i tried using useState, for some reason, didn't work the way it was supposed to 
+    const [ingredients, setIngredients] = useState([]);
 
     const getIngredientsAndMeasurements = () => {
+        const tempIngredients = [];
+
         // each recipe has only 20 slots for ingredients/measurement
         for (let i = 1; i <= 20; i++) {
             const ingredient = recipeInfo[`strIngredient${i}`];
             if (ingredient && ingredient.length > 0) {
-                ingredients.push({
+                tempIngredients.push({
                     ingredient: ingredient,
-                    measurement: recipeInfo[`strMeasure${i}`]
+                    measurement: recipeInfo[`strMeasure${i}`],
                 });
             } else {
                     break;
             }
         }
-
-        console.log('Ingredients:', ingredients);
+        setIngredients(tempIngredients);
     }
 
     useEffect(() => {
@@ -28,9 +30,17 @@ export default function IngredientsList({recipeInfo}) {
     return ( 
         <View>
             <Text>ingredients</Text>
-    
+            {
+                ingredients.map((l, i) => (
+                    <ListItem key={i} bottomDivider>
+                        <ListItem.Content>
+                            <View>
+                                <ListItem.Title>{l.measurement} {l.ingredient}</ListItem.Title>
+                            </View>
+                        </ListItem.Content>
+                    </ListItem>
+                ))
+            }
         </View>
     )
-
-
 }
