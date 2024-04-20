@@ -7,11 +7,9 @@ export default function StepsList({instructionsString}) {
 
     //apam balik
     useEffect(() => {
-        console.log(instructionsString);
         let tempInstructions = String(instructionsString).split('\n');
-        tempInstructions = tempInstructions.filter(item => item !== "" || item !== "\r");
         tempInstructions = tempInstructions.map(item => item.trim());
-
+        tempInstructions = tempInstructions.filter(item => item !== '')
         setInstructions(tempInstructions);
 
     }, [instructionsString])
@@ -21,11 +19,12 @@ export default function StepsList({instructionsString}) {
             <Text>Instructions</Text>
             {
                 instructions.map((l, i) => (
-                    <Card key={i}>
-                        <Text>{i+1}. {l}</Text>
-                    </Card>
-                ))
-            }
+                    l ? (
+                        <Card key={i}>
+                          <Text>{i + 1}. {l}</Text>
+                        </Card>
+                      ) : null
+            ))}
         </View>
     )
 }

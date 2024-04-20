@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ListItem, Button, CheckBox } from '@rneui/themed';
 import { View, ScrollView, Text } from 'react-native';
-import { updateShoppingList, deleteShoppingListItem, editShoppingListItem } from '../../databases/shoppinglistDB';
+import { updateShoppingList, deleteShoppingListItem, editShoppingListItem, deleteAllShoppingListItems } from '../../databases/shoppinglistDB';
 import AddShoppingListItem from './AddShoppingListItem';
+import EditShoppingListItem from './EditShoppingListItem';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 export default function ShoppingList() {
@@ -10,15 +12,7 @@ export default function ShoppingList() {
     const [shoppingList, setShoppingList] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [checkedItemsAmount, setCheckedItemsAmount] = useState(0);
-
-    useEffect(() => {
-        updateShoppingList(setShoppingList);
-    }, []);
-
-    useEffect(() => {
-        getAmountOfCheckedItems();
-        getTotalPrice();
-    }, [shoppingList]);
+    //const [selectedItem, setSelectedItem] = useState({ item: '', amount: '', checked: false, price: '0' });
 
     const update = () => {
         updateShoppingList(setShoppingList);
@@ -31,7 +25,12 @@ export default function ShoppingList() {
 
     const toggleCheckbox = (l) => {
         return () => {
-            editShoppingListItem(l.id, l.item, l.amount, l.checked === 1 ? false : true, l.price);
+            editShoppingListItem({
+                id: l.id, 
+                item: l.item, 
+                amount: l.amount, 
+                checked: l.checked === 1 ? false : true, 
+                price: l.price});
             update();
         };
     };
@@ -45,13 +44,34 @@ export default function ShoppingList() {
     const getAmountOfCheckedItems = () => {
         let checkedItem = 0;
         shoppingList.forEach((l) => l.checked === 1 ? checkedItem++ : null );
-        setCheckedItemsAmount(checkedItem);    }
+        setCheckedItemsAmount(checkedItem);    
+    }
+
+    const deleteAllItems = () => {
+        deleteAllShoppingListItems();
+        update();
+    }
+
+    const refreshDataArray = useCallback(() => {
+        update();
+    }, []);
+
+    useFocusEffect(refreshDataArray);
+
+    useEffect(() => {
+        getAmountOfCheckedItems();
+        getTotalPrice();
+    }, [shoppingList]);
 
     return ( 
         <ScrollView>
             <Button 
                 title="Refresh"
                 onPress={update}
+            />
+            <Button 
+                title="Reset"
+                onPress={deleteAllItems}
             />
             <AddShoppingListItem updateShoppingList={update} />
             <View>
@@ -62,19 +82,17 @@ export default function ShoppingList() {
                 {
                     shoppingList.map((l, i) => (
                         <ListItem.Swipeable 
-                            /*
                             leftContent={(reset) => (
-                                <Button
-                                    title="Info"
-                                    onPress={() => reset()}
-                                    icon={{ name: 'info', color: 'white' }}
-                                    buttonStyle={{ minHeight: '100%' }}
+                                <EditShoppingListItem 
+                                    update={update} 
+                                    itemInfo={l}
+                                    reset={reset}
                                 />
                             )}
-                            */
+                            
                             rightContent={(reset) => (
                                 <Button
-                                    title=""
+                                    title="Delete"
                                     onPress={() => {
                                         deleteItem(l.id)
                                         reset();
@@ -98,7 +116,9 @@ export default function ShoppingList() {
                                         uncheckedIcon={'checkbox-blank-outline'}
                                     />
                                     <View style={{marginRight: 'auto'}}>
-                                        <ListItem.Title>{l.item} {l.amount} </ListItem.Title>
+                                        <ListItem.Title>
+                                            {l.amount ? `${l.amount} ${l.item}` : l.item}
+                                        </ListItem.Title>
                                         <ListItem.Subtitle>{l.price.toFixed(2)}€</ListItem.Subtitle>
                                     </View>
                                     

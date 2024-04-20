@@ -4,17 +4,16 @@ const db = SQLite.openDatabase('shoppinglist.db');
 
 const updateShoppingList = (setShoppingList) => {
     db.transaction(tx => {
-        tx.executeSql('SELECT * FROM shoppinglist;', [], (_, { rows }) =>
-            setShoppingList(rows._array)
+        tx.executeSql('SELECT * FROM shoppinglist;', [], (_, { rows }) => setShoppingList(rows._array)
         );
-    }, console.log('Error while updating'), null);
+    }, null, null);
 }
 
 const saveShoppingListItem = ({item, amount, checked, price}) => {
     db.transaction(tx => {
         tx.executeSql('INSERT INTO shoppinglist (item, amount, checked, price) values (?, ?, ?, ?);',
         [item, amount, checked, parseFloat(price)]);
-    }, console.log('Error while saving'), console.log('Successfully saved')
+    }, null, null
 )
 }
 
@@ -22,11 +21,18 @@ const deleteShoppingListItem = (id) => {
     db.transaction(tx => {
             tx.executeSql('DELETE FROM shoppinglist WHERE id = ?', 
             [parseInt(id)]);
-        }, console.log("Error while deleting"), null
+        }, null, console.log('Delete success')
     )
 }
 
-const editShoppingListItem = (id, item, amount, checked, price) => {
+const deleteAllShoppingListItems = () => {
+    db.transaction(tx => {
+            tx.executeSql('DELETE FROM shoppinglist');
+        }, null, null
+    )
+}
+
+const editShoppingListItem = ({id, item, amount, checked, price}) => {
     db.transaction(
         tx => {
             tx.executeSql('UPDATE shoppinglist SET ' 
@@ -36,8 +42,8 @@ const editShoppingListItem = (id, item, amount, checked, price) => {
                 + 'price = ? '
                 + 'WHERE id = ?'
                 + ';',
-            [item, amount, checked, parseFloat(price.toFixed(2)), parseInt(id)]);
-        }, (error) => console.error("Error when editing shopping list", error), null
+            [item, amount, checked, parseFloat(price), parseInt(id)]);
+        }, null, null
     )
 }
 
@@ -51,9 +57,14 @@ const createShoppingListDB = () => {
             'checked BOOLEAN NOT NULL, ' +
             'price NUMERIC);'
         );
-    }, (error) => console.error("Error when creating shopping list DB", error), null);
-
-    //saveShoppingListItem('example', '100g', false, 10.30)
+    }, null, null);
 };
 
-export { createShoppingListDB, saveShoppingListItem, updateShoppingList, deleteShoppingListItem, editShoppingListItem };
+export { 
+    createShoppingListDB, 
+    saveShoppingListItem, 
+    updateShoppingList, 
+    deleteShoppingListItem, 
+    deleteAllShoppingListItems, 
+    editShoppingListItem 
+};

@@ -10,7 +10,6 @@ function RecipeKeywordList({navigation}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log('yess')
                 const data = await fetchRepositories(getAllCategories);
                 setKeywordList(data.categories);
             } catch (error) {
@@ -23,7 +22,6 @@ function RecipeKeywordList({navigation}) {
 
     const searchKeyword = (keyword) => {
         return () => {
-            console.log(keyword)
             navigation.navigate('SearchResult', {keyword: keyword});
         };
     }
@@ -31,7 +29,7 @@ function RecipeKeywordList({navigation}) {
     if(!keywordList) {
         return (
             <View>
-                <Text>Lameee</Text>
+                <Text>No recipes found.</Text>
             </View>
         )
     } else {

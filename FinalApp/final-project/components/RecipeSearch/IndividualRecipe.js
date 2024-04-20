@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { View, ScrollView, Text, ActivityIndicator } from 'react-native';
+import { View, ScrollView, Text, ActivityIndicator, Image } from 'react-native';
 import { fetchRepositories, getRecipeById } from './RecipeApiLinks';
 import IngredientsList from './IngredientsList';
 import StepsList from './StepsList';
-import { Button, Image } from '@rneui/base';
+import { Button } from '@rneui/base';
 
 
 export default function IndividualRecipe({idMeal, navigation}) {
@@ -35,6 +35,11 @@ export default function IndividualRecipe({idMeal, navigation}) {
         <ScrollView>
             <Button onPress={() => navigation.goBack()} title="Go back" />
             <Text>{recipeInfo.strMeal}</Text>
+            <Image
+                style={{width:"100%",height:300}}
+                resizeMode="contain"
+                source={{ uri: recipeInfo.strMealThumb }}
+            />
             <IngredientsList recipeInfo={recipeInfo} />
             <StepsList instructionsString={recipeInfo.strInstructions}/>
         </ScrollView>

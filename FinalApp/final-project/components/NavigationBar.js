@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import {RecipeSearchScreenKeywords, RecipeSearchResultsScreen, SelectedRecipeScreen} from '../screens/RecipeSearchScreen';
 import ShoppingListScreen from '../screens/ShoppingListScreen';
+import SavedScreen from '../screens/SavedScreen';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Stack = createNativeStackNavigator();
@@ -31,6 +32,8 @@ export default function NavigationBar() {
             iconName = 'nutrition'; //restaurant, pizza, nutrition, ice-cream, fish
           } else if (route.name === 'Shopping List') {
             iconName = 'storefront'; //storefront or bag-handle
+          } else if (route.name === 'Saved' ) {
+            iconName = 'heart'
           }
       
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -45,6 +48,7 @@ export default function NavigationBar() {
                 <Tab.Screen name="Home" component={HomeScreen} />
                 <Tab.Screen name="Recipes" component={RecipeStack} />
                 <Tab.Screen name="Shopping List" component={ShoppingListScreen} />
+                <Tab.Screen name="Saved" component={SavedScreen} />
             </Tab.Navigator>
         </NavigationContainer>
 

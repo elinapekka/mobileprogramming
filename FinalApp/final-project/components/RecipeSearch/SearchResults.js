@@ -1,5 +1,5 @@
 import { Card, Button } from '@rneui/themed';
-import { View, ScrollView, Text, ActivityIndicator, Image,FlatList } from 'react-native';
+import { View, ScrollView, Text, ActivityIndicator, Image, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
 import { CardTitle } from '@rneui/base/dist/Card/Card.Title';
 import { fetchRepositories, searchByCategory } from './RecipeApiLinks';
