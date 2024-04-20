@@ -20,6 +20,15 @@ function RecipeStack() {
   );
 }
 
+function SavedRecipeStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="SavedRecipes" options={{ headerShown: false }} component={SavedScreen} />
+      <Stack.Screen name="SavedRecipeSelected" options={{ headerShown: false }} component={SelectedRecipeScreen} />
+    </Stack.Navigator>
+  )
+}
+
 export default function NavigationBar() {
 
     const screenOptions = ({ route }) => ({
@@ -48,7 +57,7 @@ export default function NavigationBar() {
                 <Tab.Screen name="Home" component={HomeScreen} />
                 <Tab.Screen name="Recipes" component={RecipeStack} />
                 <Tab.Screen name="Shopping List" component={ShoppingListScreen} />
-                <Tab.Screen name="Saved" component={SavedScreen} />
+                <Tab.Screen name="Saved" component={SavedRecipeStack} />
             </Tab.Navigator>
         </NavigationContainer>
 

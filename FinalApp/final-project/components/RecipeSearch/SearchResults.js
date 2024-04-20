@@ -3,6 +3,7 @@ import { View, ScrollView, Text, ActivityIndicator, Image, FlatList } from 'reac
 import { useEffect, useState } from 'react';
 import { CardTitle } from '@rneui/base/dist/Card/Card.Title';
 import { fetchRepositories, searchByCategory } from './RecipeApiLinks';
+import RecipeCard from './RecipeCard';
 
 export default function SearchResult({keyword, navigation}) {
     const [meals, setMeals] = useState([]);
@@ -40,17 +41,9 @@ export default function SearchResult({keyword, navigation}) {
                 <View>
                     {
                         meals.map((l, i) => (
-                            <Card key={i}>
-                                <Card.Title>{l.foodTitle}</Card.Title>
-                                <Image
-                                    style={{width:"100%",height:100}}
-                                    resizeMode="contain"
-                                    source={{ uri: l.strMealThumb }}
-                                />
-                                <Text >{l.strMeal}</Text>
-                                <Button title="Check now" onPress={openRecipe(l.idMeal)} />
-                                <Card.Divider/>
-                            </Card>
+                            <View key={i}>
+                                <RecipeCard recipe={l} openRecipe={openRecipe} />
+                            </View>
                         ))
                     }
                 </View>

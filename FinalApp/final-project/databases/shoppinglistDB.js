@@ -13,16 +13,15 @@ const saveShoppingListItem = ({item, amount, checked, price}) => {
     db.transaction(tx => {
         tx.executeSql('INSERT INTO shoppinglist (item, amount, checked, price) values (?, ?, ?, ?);',
         [item, amount, checked, parseFloat(price)]);
-    }, null, null
-)
+    }, null, null);
 }
 
 const deleteShoppingListItem = (id) => {
     db.transaction(tx => {
             tx.executeSql('DELETE FROM shoppinglist WHERE id = ?', 
             [parseInt(id)]);
-        }, null, console.log('Delete success')
-    )
+        }, null, null
+    );
 }
 
 const deleteAllShoppingListItems = () => {

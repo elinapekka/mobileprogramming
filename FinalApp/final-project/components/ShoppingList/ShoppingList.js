@@ -12,7 +12,6 @@ export default function ShoppingList() {
     const [shoppingList, setShoppingList] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [checkedItemsAmount, setCheckedItemsAmount] = useState(0);
-    //const [selectedItem, setSelectedItem] = useState({ item: '', amount: '', checked: false, price: '0' });
 
     const update = () => {
         updateShoppingList(setShoppingList);

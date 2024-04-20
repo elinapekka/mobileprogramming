@@ -4,6 +4,7 @@ import { fetchRepositories, getRecipeById } from './RecipeApiLinks';
 import IngredientsList from './IngredientsList';
 import StepsList from './StepsList';
 import { Button } from '@rneui/base';
+import SaveExistingRecipe from '../Saved/SaveExistingRecipe';
 
 
 export default function IndividualRecipe({idMeal, navigation}) {
@@ -23,14 +24,6 @@ export default function IndividualRecipe({idMeal, navigation}) {
         console.log(recipeInfo)
     }, [])
 
-    /*
-            <Image
-                source={recipeInfo.strMealThumb}
-                containerStyle={{width: 100, height: 100}}
-                PlaceholderContent={<ActivityIndicator />}
-            />
-    */
-
     return(
         <ScrollView>
             <Button onPress={() => navigation.goBack()} title="Go back" />
@@ -40,6 +33,7 @@ export default function IndividualRecipe({idMeal, navigation}) {
                 resizeMode="contain"
                 source={{ uri: recipeInfo.strMealThumb }}
             />
+            <SaveExistingRecipe id={recipeInfo.idMeal} />
             <IngredientsList recipeInfo={recipeInfo} />
             <StepsList instructionsString={recipeInfo.strInstructions}/>
         </ScrollView>
